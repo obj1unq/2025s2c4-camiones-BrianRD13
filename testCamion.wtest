@@ -1,0 +1,78 @@
+import camion.*
+import cosas.*
+
+describe "Carga y Descarga" {
+  test "Cargar Bumblebee y verificar si esta solo" {
+    camion.cargar(bumblebee)
+    assert.equals(#{bumblebee}, camion.cosas())
+    }
+
+  test "Cargar Knight Rider y verificar si estan ambos" {
+    camion.cargar(bumblebee)
+    // Ya esta cargado Bumblebee
+
+    camion.cargar(knightRider)
+    assert.equals(#{bumblebee, knightRider}, camion.cosas())
+  }
+
+  test "Descargar Bumblebee y verificar si esta solo Knight Rider" {
+    camion.cargar(bumblebee)
+    camion.cargar(knightRider)
+    // Ya estan cargados Bumblebee y Knight Rider
+
+    camion.descargar(bumblebee)
+    assert.equals(#{knightRider}, camion.cosas())
+  }
+
+  test "Cargar Knight Rider y descargar Bumblebee, verificando que ambas operaciones fallen" {
+    camion.cargar(bumblebee)
+    // Ya esta cargado Bumblebee
+    
+    assert.throwsExceptionWithMessage("No se puede cargar dos veces la misma cosa", { camion.cargar(knightRider) })
+    assert.throwsExceptionWithMessage("No se puede descargar una cosa que no esta en el camion", { camion.descargar(bumblebee) })
+  }
+}
+
+describe "Todo peso par" {
+  test "Un camion cargado con Bumblebee y 50 kg de arena a granel deberia ser par" {
+    arenaAGranel.cambiarPeso(50)
+    camion.cargar(bumblebee)
+    camion.cargar(arenaAGranel)
+
+    assert.that(camion.todoPesoPar())
+  }
+
+  test "En cambio, si la arena a granel pesa 51 kg entonces no" {
+    arenaAGranel.cambiarPeso(51)
+    camion.cargar(bumblebee)
+    camion.cargar(arenaAGranel)
+
+    assert.notThat(camion.todoPesoPar())    
+  }
+}
+
+describe "Hay alguno que pesa" {
+  test "Se carga a Bumblebee y 50 kg de arena a granel, luego se pregunta por 50 kg y debe dar verdadero" {
+    arenaAGranel.cambiarPeso(50)
+    camion.cargar(bumblebee)
+    camion.cargar(arenaAGranel)
+
+    assert.that(camion.objetoConPeso(50))
+  }
+
+  test "Se pregunta por 800 kg y debe dar verdadero, debido a Bumblebee" {
+    arenaAGranel.cambiarPeso(50)
+    camion.cargar(bumblebee)
+    camion.cargar(arenaAGranel)
+
+    assert.that(camion.objetoConPeso(800))
+  }
+
+  test "Se pregunta por 500 kg y debe dar falso" {
+    arenaAGranel.cambiarPeso(50)
+    camion.cargar(bumblebee)
+    camion.cargar(arenaAGranel)
+
+    assert.notThat(camion.objetoConPeso(500))
+  }
+}
