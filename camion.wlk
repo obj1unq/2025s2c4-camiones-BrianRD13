@@ -1,4 +1,5 @@
 import cosas.*
+class UserException inherits wollok.lang.Exception {}
 
 object camion {
 	const property cosas = #{}
@@ -26,14 +27,16 @@ object camion {
 	}
 		
 	method cargar(unaCosa) {
-		if (!cosas.contains(unaCosa)) {
-			cosas.add(unaCosa)
+		if (cosas.contains(unaCosa)) {
+			throw new UserException(message = "No se puede cargar dos veces la misma cosa")
 		}
+		cosas.add(unaCosa)
 	}
 
 	method descargar(unaCosa) {
-		if (cosas.contains(unaCosa)) {
-			cosas.remove(unaCosa)
-		}
+		if (!cosas.contains(unaCosa)) {
+			 throw new UserException(message = "No se puede descargar una cosa que no esta en el camion")
+			}
+		cosas.remove(unaCosa)
 	}
 }

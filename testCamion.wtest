@@ -26,7 +26,7 @@ describe "Carga y Descarga" {
 
   test "Cargar Knight Rider y descargar Bumblebee, verificando que ambas operaciones fallen" {
     camion.cargar(knightRider)
-    // Ya esta cargado Knight Rider
+    // Ya esta cargado knightRider
     
     assert.throwsException({ camion.cargar(knightRider) })
     assert.throwsException({ camion.descargar(bumblebee) })
@@ -52,27 +52,23 @@ describe "Todo peso par" {
 }
 
 describe "Hay alguno que pesa" {
-  test "Se carga a Bumblebee y 50 kg de arena a granel, luego se pregunta por 50 kg y debe dar verdadero" {
+  method initialize() {
     arenaAGranel.cambiarPeso(50)
     camion.cargar(bumblebee)
     camion.cargar(arenaAGranel)
-
+  }
+  test "Se carga a Bumblebee y 50 kg de arena a granel, luego se pregunta por 50 kg y debe dar verdadero" {
+    camion.initialize()
     assert.that(camion.objetoConPeso(50))
   }
 
   test "Se pregunta por 800 kg y debe dar verdadero, debido a Bumblebee" {
-    arenaAGranel.cambiarPeso(50)
-    camion.cargar(bumblebee)
-    camion.cargar(arenaAGranel)
-
+    camion.initialize()
     assert.that(camion.objetoConPeso(800))
   }
 
   test "Se pregunta por 500 kg y debe dar falso" {
-    arenaAGranel.cambiarPeso(50)
-    camion.cargar(bumblebee)
-    camion.cargar(arenaAGranel)
-
+    camion.initialize()
     assert.notThat(camion.objetoConPeso(500))
   }
 }
