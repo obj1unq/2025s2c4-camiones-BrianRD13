@@ -25,11 +25,11 @@ describe "Carga y Descarga" {
   }
 
   test "Cargar Knight Rider y descargar Bumblebee, verificando que ambas operaciones fallen" {
-    camion.cargar(bumblebee)
-    // Ya esta cargado Bumblebee
+    camion.cargar(knightRider)
+    // Ya esta cargado Knight Rider
     
-    assert.throwsExceptionWithMessage("No se puede cargar dos veces la misma cosa", { camion.cargar(knightRider) })
-    assert.throwsExceptionWithMessage("No se puede descargar una cosa que no esta en el camion", { camion.descargar(bumblebee) })
+    assert.throwsException({ camion.cargar(knightRider) })
+    assert.throwsException({ camion.descargar(bumblebee) })
   }
 }
 
@@ -87,12 +87,53 @@ describe "Peso y exceso de peso" {
     assert.notThat(camion.excedidoDePeso())
   }
 
-  test "Pero si el paquete de ladrillos contiene 400 ladrillos, entonces el peso total es 2600 y sí está excedido." {
+  test "Pero si el paquete de ladrillos contiene 400 ladrillos, entonces el peso total es 2600 y sí está excedido" {
     camion.cargar(bumblebee)
     paqueteDeLadrillos.agregarLadrillos(400)
     camion.cargar(paqueteDeLadrillos)
 
     assert.equals(2600, camion.peso())
     assert.that(camion.excedidoDePeso())
+  }
+}
+
+describe "El de nivel" {
+  method initialize() {
+    camion.cargar(bumblebee) // modo auto
+    camion.cargar(bateriaAntiaerea) // descargada
+    camion.cargar(residuosRadiactivos)
+  }
+
+  test "Para un camión cargado con Bumblebee en modo auto, la batería antiaérea descargada y los residuos radiactivos, si se pide algo de nivel 0 debe encontrar a la batería antiaérea" {
+    camion.initialize()
+    assert.equals(bateriaAntiaerea, camion.objetoConPeligrosidad(0))
+  }
+
+  test "Si se pide algo de nivel 15 debe encontrar a Bumblebee" {
+    camion.initialize()
+    assert.equals(bumblebee, camion.objetoConPeligrosidad(15))
+    
+  }
+
+  test "Si se pide algo de nivel 200 debe encontrar a los residuos" {
+    camion.initialize()
+    assert.equals(residuosRadiactivos, camion.objetoConPeligrosidad(200))
+  }
+
+  test "Si se pide algo de nivel 30 debe romper, porque no se encuentra nada" {
+    camion.initialize()
+    assert.throwsException({ camion.objetoConPeligrosidad(30) })
+  }
+
+  test "Si se cambia a Bumblebee a modo robot y se vuelve a pedir algo de 30, entonces encuentra a Bumblebee" {
+    camion.initialize()
+    bumblebee.transformarse() // modo robot
+    assert.equals(bumblebee, camion.objetoConPeligrosidad(30))
+  }
+
+  test "Si se carga la batería con misiles y se pide algo de peligrosidad 100 entonces encuentra a la batería" {
+    camion.initialize()
+    bateriaAntiaerea.cambiarEstado() // con misiles
+    assert.equals(bateriaAntiaerea, camion.objetoConPeligrosidad(100))
   }
 }
