@@ -76,3 +76,23 @@ describe "Hay alguno que pesa" {
     assert.notThat(camion.objetoConPeso(500))
   }
 }
+
+describe "Peso y exceso de peso" {
+  test "Si el camion tiene a Bumblebee y un paquete de 300 ladrillos, entonces el peso total es 2400 y no está excedido de peso" {
+    camion.cargar(bumblebee)
+    paqueteDeLadrillos.agregarLadrillos(300)
+    camion.cargar(paqueteDeLadrillos)
+
+    assert.equals(2400, camion.peso())
+    assert.notThat(camion.excedidoDePeso())
+  }
+
+  test "Pero si el paquete de ladrillos contiene 400 ladrillos, entonces el peso total es 2600 y sí está excedido." {
+    camion.cargar(bumblebee)
+    paqueteDeLadrillos.agregarLadrillos(400)
+    camion.cargar(paqueteDeLadrillos)
+
+    assert.equals(2600, camion.peso())
+    assert.that(camion.excedidoDePeso())
+  }
+}

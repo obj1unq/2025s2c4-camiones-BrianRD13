@@ -4,6 +4,16 @@ class UserException inherits wollok.lang.Exception {}
 object camion {
 	const property cosas = #{}
 
+	method peso() {
+		var pesoTotal = 1000
+		cosas.forEach{ unaCosa => pesoTotal += unaCosa.peso() }
+		return pesoTotal
+	}
+
+	method excedidoDePeso() {
+		return self.peso() > 2500		
+	}
+
 	method objetoConPeso(pesoDado) {
 		return cosas.any{ unaCosa => unaCosa.peso() == pesoDado }
 	}
