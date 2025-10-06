@@ -1,3 +1,4 @@
+// Las cosas
 object knightRider {
 	method peso() = 500
 	method nivelPeligrosidad() = 10
@@ -80,5 +81,45 @@ object residuosRadiactivos {
 
 	method cambiarPeso(nuevoPeso) {
 		peso = nuevoPeso
+	}
+}
+
+// Más cosas
+object contenedorPortuario {
+	var property cosas = #{}
+
+	method peso() {
+		var pesoTotal = 100
+		cosas.forEach{ unaCosa => pesoTotal += unaCosa.peso() }
+		return pesoTotal
+	}
+
+	method nivelPeligrosidad() {
+		if (cosas.isEmpty()) {
+			return 0
+		}
+		return cosas.map{ unaCosa => unaCosa.nivelPeligrosidad() }.max()
+	}
+}
+
+object embalajeDeSeguridad {
+	var property cosaEnvuelta = null
+
+	method peso() {
+		if (cosaEnvuelta != null) {
+			return cosaEnvuelta.peso()
+		}
+		return 0
+	}
+
+	method nivelPeligrosidad() {
+		if (cosaEnvuelta != null) {
+			return cosaEnvuelta.nivelPeligrosidad() / 2
+		}
+		return 0
+	}
+
+	method envolver(unaCosa) {
+		cosaEnvuelta = unaCosa
 	}
 }
