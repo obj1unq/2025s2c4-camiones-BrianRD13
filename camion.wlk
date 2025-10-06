@@ -4,6 +4,14 @@ class UserException inherits wollok.lang.Exception {}
 object camion {
 	const property cosas = #{}
 
+	method objetosMasPeligrososQue(peligrosidad) {
+		if (peligrosidad.isObject()) {
+			return cosas.filter{ unaCosa => unaCosa.nivelPeligrosidad() > peligrosidad }		
+		}
+		return cosas.filter{ unaCosa => unaCosa.nivelPeligrosidad() > peligrosidad.nivelPeligrosidad() }
+		
+	}
+
 	method objetoConPeligrosidad(nivelPeligrosidad) {
 		return cosas.find{ unaCosa => unaCosa.nivelPeligrosidad() == nivelPeligrosidad }
 	}

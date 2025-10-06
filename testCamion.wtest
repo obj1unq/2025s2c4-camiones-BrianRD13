@@ -133,3 +133,47 @@ describe "El de nivel" {
     assert.equals(bateriaAntiaerea, camion.objetoConPeligrosidad(100))
   }
 }
+
+describe "Cosas peligrosas" {
+  method initialize() {
+    camion.cargar(knightRider) // 20
+    bateriaAntiaerea.cambiarEstado() // con misiles, 100
+    camion.cargar(bateriaAntiaerea)
+  }
+  test "Para un camión cargado con Knight Rider y la batería antiaérea cargada, en las cosas más peligrosas de 15 sólo está la batería antiaérea" {
+    camion.initialize()
+
+    assert.equals(#{bateriaAntiaerea}, camion.objetosMasPeligrososQue(15))
+  }
+
+  test "En las cosas más peligrosas que Bumblebee sólo está la batería antiaérea." {
+    camion.initialize()
+
+    assert.equals(#{bateriaAntiaerea}, camion.objetosMasPeligrososQue(bumblebee))  
+  }
+
+  test "Las cosas que superan 2 de peligrosidad son Knight Rider y la batería antiaérea." {
+    camion.initialize()
+
+    assert.equals(#{knightRider, bateriaAntiaerea}, camion.objetosMasPeligrososQue(2))
+  }
+
+  test "Las cosas más peligrosas que el paquete de ladrillos son Knight Rider y la batería antiaérea." {
+    camion.initialize()
+    paqueteDeLadrillos.agregarLadrillos(100) // peligrosidad 2
+
+    assert.equals(#{knightRider, bateriaAntiaerea}, camion.objetosMasPeligrososQue(paqueteDeLadrillos))    
+  }
+
+  test "No hay cosas más peligrosas que 200." {
+    camion.initialize()
+
+    assert.equals(#{}, camion.objetosMasPeligrososQue(200))    
+  }
+
+  test "No hay nada más peligroso que los residuos radiactivos." {
+    camion.initialize()
+
+    assert.equals(#{}, camion.objetosMasPeligrososQue(residuosRadiactivos))  
+  }
+}
