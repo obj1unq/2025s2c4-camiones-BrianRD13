@@ -177,3 +177,30 @@ describe "Cosas peligrosas" {
     assert.equals(#{}, camion.objetosMasPeligrososQue(residuosRadiactivos))  
   }
 }
+
+describe "Puede circular en ruta" {
+  test "Si el camión tiene a Bumblebee en auto y un paquete de 300 ladrillos, puede circular en una ruta con nivel 20." {
+    camion.cargar(bumblebee) // modo auto
+    paqueteDeLadrillos.agregarLadrillos(300) // peligrosidad 2, peso 600
+    camion.cargar(paqueteDeLadrillos)
+
+    assert.that(camion.circularEnRuta())    
+  }
+
+  test "Pero si el camión tiene el paquete de 400 ladrillos y Bumblebee en modo auto ya no puede circular en la ruta de nivel 20, por estar excedido de peso." {
+    camion.cargar(bumblebee) // modo auto
+    paqueteDeLadrillos.agregarLadrillos(400) // peligrosidad 2, peso 800
+    camion.cargar(paqueteDeLadrillos)
+
+    assert.notThat(camion.circularEnRuta())    
+  }
+
+  test "Tampoco puede circular en una ruta de nivel 20 si tiene un paquete de 300 ladrillos y Bumblebee está en modo robot." {
+    bumblebee.transformarse() // modo robot
+    camion.cargar(bumblebee)
+    paqueteDeLadrillos.agregarLadrillos(300) // peligrosidad 2, peso 600
+    camion.cargar(paqueteDeLadrillos)
+
+    assert.notThat(camion.circularEnRuta())
+  }
+}
